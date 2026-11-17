@@ -4,11 +4,18 @@ Uso:
     uv run signature-pipeline
 """
 
+# ruff: noqa: F401  (imports que o main vai usar; tire ao implementar)
 from pathlib import Path
 
-from signature_pipeline.ollama_service import ollama_ask  # noqa: F401
-from signature_pipeline.schemas import SignatureDetection  # noqa: F401
-from signature_pipeline.tesseract_service import (  # noqa: F401
+import cv2
+import fitz
+import matplotlib.pyplot as plt
+import pytesseract
+from pytesseract import Output
+
+from signature_pipeline.ollama_service import ollama_ask
+from signature_pipeline.schemas import SignatureDetection
+from signature_pipeline.tesseract_service import (
     crops_target,
     load_page,
     show,

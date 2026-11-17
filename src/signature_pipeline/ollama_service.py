@@ -1,9 +1,10 @@
 """Chamada ao modelo de visão no Ollama."""
 
+# ruff: noqa: F401  (imports que as funções vão usar; tire ao implementar)
 from collections.abc import Mapping, Sequence
 from typing import Any, Literal
 
-from ollama import ChatResponse
+from ollama import ChatResponse, Client
 
 
 def ollama_ask(

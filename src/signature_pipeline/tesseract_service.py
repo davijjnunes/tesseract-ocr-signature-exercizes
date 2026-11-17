@@ -1,7 +1,18 @@
 """OCR e recorte com o Tesseract."""
 
+# ruff: noqa: F401  (imports que as funções vão usar; tire ao implementar)
+import re
+import unicodedata
+from pathlib import Path
+
+import cv2
 import fitz
+import matplotlib.pyplot as plt
 import numpy as np
+import pytesseract
+from pytesseract import Output
+
+PATH_DEFAULT = r"documentos/certificado.pdf"
 
 
 def load_page(doc: fitz.Document, page_num: int = 0, scale: float = 2, dpi: int = 300) -> np.ndarray:
