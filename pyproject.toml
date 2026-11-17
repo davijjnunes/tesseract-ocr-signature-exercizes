@@ -1,0 +1,29 @@
+[project]
+name = "signature-pipeline"
+version = "0.1.0"
+description = "Pipeline que recorta a assinatura com Tesseract e confirma com Ollama."
+readme = "README.md"
+authors = [
+    { name = "davijjnunes-hash", email = "davijjnunes@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.5.5",
+    "ollama>=0.6.3",
+    "opencv-python>=5.0.0.93",
+    "pydantic>=2.14.3",
+    "pymupdf>=2.1",
+    "pytesseract>=0.3.13",
+]
+
+[project.scripts]
+signature-pipeline = "signature_pipeline.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.0,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.5",
+]

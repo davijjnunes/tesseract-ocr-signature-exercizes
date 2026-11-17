@@ -1,0 +1,18 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Documentos reais e recortes (dados pessoais)
+documentos/*
+!documentos/.gitkeep
+recortes/
+
+# Cache
+.ruff_cache/
