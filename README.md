@@ -18,7 +18,7 @@ flowchart LR
 2. `pytesseract.image_to_data`: lê as palavras e as posições delas (conferir com `show_box`).
 3. `crops_target`: acha a âncora ("Diretora") e recorta a região acima dela.
 4. `ollama_ask`: envia o recorte ao `qwen2.5vl:3b`.
-5. `SignatureDetection`: valida a resposta `{"has_signature": true/false}`.
+5. `json.loads`: lê a resposta `{"has_signature": true/false}`.
 
 ## O que implementar
 
@@ -27,7 +27,6 @@ flowchart LR
 | `src/signature_pipeline/tesseract_service.py` | `load_page`, `show`, `show_box`, `box`, `normalize`, `crops_target` |
 | `src/signature_pipeline/ollama_service.py` | `ollama_ask` |
 | `src/signature_pipeline/main.py` | `main` (junta tudo, os passos estão na docstring) |
-| `src/signature_pipeline/schemas.py` | já pronto (`SignatureDetection`) |
 
 ## Requisitos
 
@@ -135,9 +134,10 @@ Certificados de exemplo em `documentos/`:
 | `certificadoDavi.png` | tem assinatura |
 | `certificado_somente_diretoria.png` | tem assinatura |
 | `certificado_assinatura_borrada.png` | caso difícil: assinatura borrada |
+| `certificadoDavi_somente_diretora_blur_2339.png` | caso difícil: assinatura borrada |
 
 Para testar outro, coloque o arquivo em `documentos/` e troque o `PATH`.
-Só esses três exemplos vão para o Git. Outros documentos e a pasta
+Só esses exemplos vão para o Git. Outros documentos e a pasta
 `recortes/` ficam só na sua máquina, porque podem ter dados pessoais.
 
 Para verificar o código:
@@ -155,6 +155,5 @@ signature-pipeline/
 └── src/signature_pipeline/
     ├── main.py                 # main(): o pipeline completo
     ├── tesseract_service.py    # OCR, recorte e visualização
-    ├── ollama_service.py       # chamada ao Ollama
-    └── schemas.py              # formato da resposta do modelo
+    └── ollama_service.py       # chamada ao Ollama
 ```

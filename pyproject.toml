@@ -12,7 +12,6 @@ dependencies = [
     "numpy>=2.5.5",
     "ollama>=0.6.3",
     "opencv-python>=5.0.0.93",
-    "pydantic>=2.14.3",
     "pymupdf>=2.1",
     "pytesseract>=0.3.13",
 ]

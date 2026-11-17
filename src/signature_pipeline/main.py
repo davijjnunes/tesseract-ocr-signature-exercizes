@@ -5,6 +5,7 @@ Uso:
 """
 
 # ruff: noqa: F401  (imports que o main vai usar; tire ao implementar)
+import json
 from pathlib import Path
 
 import cv2
@@ -14,7 +15,6 @@ import pytesseract
 from pytesseract import Output
 
 from signature_pipeline.ollama_service import ollama_ask
-from signature_pipeline.schemas import SignatureDetection
 from signature_pipeline.tesseract_service import (
     crops_target,
     load_page,
@@ -49,8 +49,8 @@ def main() -> None:
        como ``RECORTES_DIR / f"{PATH.stem}_{n}.png"``.
        Se não houver recorte, avisar "Target não encontrado".
     5. Enviar o recorte ao modelo com ``ollama_ask``
-       (``format=SignatureDetection.model_json_schema()``).
-    6. Validar com ``SignatureDetection.model_validate_json`` e imprimir o resultado.
+       (``format="json"``).
+    6. Ler a resposta com ``json.loads`` e imprimir ``answer["has_signature"]``.
     """
     pass
 
