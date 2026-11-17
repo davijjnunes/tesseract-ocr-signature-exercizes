@@ -12,6 +12,10 @@ wheels/
 # Documentos reais e recortes (dados pessoais)
 documentos/*
 !documentos/.gitkeep
+# certificados de exemplo que podem ir para o GitHub
+!documentos/certificadoDavi.png
+!documentos/certificado_somente_diretoria.png
+!documentos/certificado_assinatura_borrada.png
 recortes/
 
 # Cache

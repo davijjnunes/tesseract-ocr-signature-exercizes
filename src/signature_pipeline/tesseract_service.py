@@ -12,7 +12,7 @@ import numpy as np
 import pytesseract
 from pytesseract import Output
 
-PATH_DEFAULT = r"documentos/certificado.pdf"
+PATH_DEFAULT = Path(__file__).resolve().parents[2] / "documentos" / "certificadoDavi.png"
 
 
 def load_page(doc: fitz.Document, page_num: int = 0, scale: float = 2, dpi: int = 300) -> np.ndarray:

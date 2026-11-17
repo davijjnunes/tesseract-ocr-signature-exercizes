@@ -22,8 +22,12 @@ from signature_pipeline.tesseract_service import (
     show_box,
 )
 
-PATH = Path("documentos/certificado.pdf")
-RECORTES_DIR = Path("recortes")
+# caminhos a partir da raiz do projeto: funciona de qualquer pasta
+ROOT_DIR = Path(__file__).resolve().parents[2]
+DOCUMENTOS_DIR = ROOT_DIR / "documentos"
+RECORTES_DIR = ROOT_DIR / "recortes"
+
+PATH = DOCUMENTOS_DIR / "certificadoDavi.png"  # troque para testar outro certificado
 
 SYSTEM_PROMPT = "Você analisa documentos e responde só com base na imagem."
 
@@ -36,11 +40,13 @@ USER_PROMPT = (
 def main() -> None:
     """Roda o pipeline em ``PATH``.
 
-    1. Abrir o PDF com ``fitz.open`` e carregar a página 0 (``load_page``).
+    1. Abrir o documento com ``fitz.open`` (aceita PDF, PNG e JPG) e carregar
+       a página 0 (``load_page``).
     2. Converter para cinza e rodar ``pytesseract.image_to_data``
        (``lang="por"``, ``config="--psm 6"``, ``Output.DICT``).
     3. Conferir as palavras lidas com ``show_box``.
-    4. Recortar com ``crops_target`` e salvar em ``RECORTES_DIR/target_{n}.png``.
+    4. Recortar com ``crops_target``, criar ``RECORTES_DIR`` e salvar cada recorte
+       como ``RECORTES_DIR / f"{PATH.stem}_{n}.png"``.
        Se não houver recorte, avisar "Target não encontrado".
     5. Enviar o recorte ao modelo com ``ollama_ask``
        (``format=SignatureDetection.model_json_schema()``).

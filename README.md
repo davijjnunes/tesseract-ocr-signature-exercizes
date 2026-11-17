@@ -104,7 +104,6 @@ Linux:
 
 ```bash
 uv sync
-cp /caminho/do/certificado.pdf documentos/certificado.pdf
 uv run signature-pipeline
 ```
 
@@ -112,7 +111,6 @@ Windows (PowerShell):
 
 ```powershell
 uv sync
-Copy-Item C:\caminho\do\certificado.pdf documentos\certificado.pdf
 uv run signature-pipeline
 ```
 
@@ -127,8 +125,20 @@ uv run signature-pipeline
 | `uv` bloqueado pela política de execução (Windows) | Rode `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` e abra o PowerShell de novo. |
 
 O documento de entrada é `PATH` e a pasta dos recortes é `RECORTES_DIR`,
-ambos em `main.py`. As pastas `documentos/` e `recortes/` ficam fora do Git,
-porque guardam documentos reais.
+ambos em `main.py` e calculados a partir da raiz do projeto. Os recortes são
+salvos como `recortes/<nome-do-documento>_<n>.png`.
+
+Certificados de exemplo em `documentos/`:
+
+| Arquivo | Esperado |
+|---------|----------|
+| `certificadoDavi.png` | tem assinatura |
+| `certificado_somente_diretoria.png` | tem assinatura |
+| `certificado_assinatura_borrada.png` | caso difícil: assinatura borrada |
+
+Para testar outro, coloque o arquivo em `documentos/` e troque o `PATH`.
+Só esses três exemplos vão para o Git. Outros documentos e a pasta
+`recortes/` ficam só na sua máquina, porque podem ter dados pessoais.
 
 Para verificar o código:
 
@@ -140,7 +150,7 @@ uv run ruff check
 
 ```
 signature-pipeline/
-├── documentos/                 # PDFs de entrada (fora do Git)
+├── documentos/                 # certificados de entrada (só os exemplos vão para o Git)
 ├── pyproject.toml              # dependências e o comando signature-pipeline
 └── src/signature_pipeline/
     ├── main.py                 # main(): o pipeline completo
