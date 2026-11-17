@@ -31,6 +31,11 @@ flowchart LR
 
 ## Requisitos
 
+Três coisas na máquina: **Tesseract** (com o idioma português), **Ollama**
+(com o modelo `qwen2.5vl:3b`) e **uv**. O uv baixa o Python 3.13 sozinho.
+
+### Linux (Ubuntu/Debian)
+
 ```bash
 # Tesseract com português
 sudo apt install -y tesseract-ocr tesseract-ocr-por
@@ -43,13 +48,83 @@ ollama pull qwen2.5vl:3b
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
+### Windows (PowerShell)
+
+```powershell
+# Tesseract (instalador da UB Mannheim)
+winget install UB-Mannheim.TesseractOCR
+
+# Ollama e o modelo de visão
+winget install Ollama.Ollama
+ollama pull qwen2.5vl:3b
+
+# uv
+winget install astral-sh.uv
+```
+
+Sem o `winget`, baixe os instaladores direto:
+[Tesseract](https://github.com/UB-Mannheim/tesseract/wiki),
+[Ollama](https://ollama.com/download/windows) e
+[uv](https://docs.astral.sh/uv/getting-started/installation/).
+
+Depois de instalar, **feche e abra o PowerShell** para ele enxergar os novos
+comandos. No Windows, o Tesseract precisa de dois ajustes:
+
+1. **Idioma português.** No instalador, em *Additional language data*, marque
+   **Portuguese**. Se já instalou sem marcar, baixe o
+   [`por.traineddata`](https://github.com/tesseract-ocr/tessdata/raw/main/por.traineddata)
+   e copie para `C:\Program Files\Tesseract-OCR\tessdata\`.
+2. **PATH.** O instalador não coloca o Tesseract no PATH. Adicione com:
+
+   ```powershell
+   [Environment]::SetEnvironmentVariable(
+       "Path",
+       [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\Program Files\Tesseract-OCR",
+       "User"
+   )
+   ```
+
+   Outra opção é apontar o caminho no código, antes de usar o `pytesseract`:
+
+   ```python
+   pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+   ```
+
+### Conferir a instalação (Linux e Windows)
+
+```bash
+tesseract --list-langs   # precisa aparecer "por"
+ollama list              # precisa aparecer qwen2.5vl:3b
+uv --version
+```
+
 ## Como rodar
+
+Linux:
 
 ```bash
 uv sync
 cp /caminho/do/certificado.pdf documentos/certificado.pdf
 uv run signature-pipeline
 ```
+
+Windows (PowerShell):
+
+```powershell
+uv sync
+Copy-Item C:\caminho\do\certificado.pdf documentos\certificado.pdf
+uv run signature-pipeline
+```
+
+## Problemas comuns
+
+| Sintoma | Solução |
+|---------|---------|
+| `TesseractNotFoundError` | O Tesseract não está no PATH. No Windows, veja o passo 2 acima ou use o `tesseract_cmd`. |
+| Erro com `por.traineddata` | Falta o idioma português. Linux: `sudo apt install tesseract-ocr-por`. Windows: copie o arquivo para a pasta `tessdata`. |
+| `ollama` não é reconhecido (Windows) | Feche e abra o PowerShell depois de instalar. |
+| Erro de conexão com o Ollama | O Ollama não está rodando. Linux: `ollama serve`. Windows: abra o app Ollama (ícone perto do relógio). |
+| `uv` bloqueado pela política de execução (Windows) | Rode `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` e abra o PowerShell de novo. |
 
 O documento de entrada é `PATH` e a pasta dos recortes é `RECORTES_DIR`,
 ambos em `main.py`. As pastas `documentos/` e `recortes/` ficam fora do Git,
